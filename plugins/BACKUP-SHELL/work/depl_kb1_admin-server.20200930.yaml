@@ -1,0 +1,129 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "12"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"extensions/v1beta1","kind":"Deployment","metadata":{"annotations":{"deployment.kubernetes.io/revision":"1"},"creationTimestamp":"2020-08-06T15:22:29Z","generation":1,"labels":{"app":"admin-server"},"name":"admin-server","namespace":"app-hub","resourceVersion":"48104102","selfLink":"/apis/extensions/v1beta1/namespaces/app-hub/deployments/admin-server","uid":"a4306fa3-d7f8-11ea-aade-0242ac110009"},"spec":{"progressDeadlineSeconds":600,"replicas":1,"revisionHistoryLimit":10,"selector":{"matchLabels":{"app":"admin-server"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"kubectl.kubernetes.io/restartedAt":"2020-08-05T13:20:07+02:00"},"creationTimestamp":null,"labels":{"app":"admin-server"}},"spec":{"containers":[{"env":[{"name":"TZ","value":"Europe/Rome"}],"image":"multichannel-dtr-kb2.gribankprd.dmz/hn/credit-agricole-app-hub-admin-server:4551","imagePullPolicy":"IfNotPresent","name":"admin-server","ports":[{"containerPort":8080,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/actuator/health","port":8080,"scheme":"HTTP"},"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1},"resources":{"limits":{"cpu":"500m","memory":"2Gi"},"requests":{"cpu":"250m","memory":"1Gi"}},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"dnsPolicy":"ClusterFirst","imagePullSecrets":[{"name":"acr-auth-sp"},{"name":"dtr"}],"initContainers":[{"command":["sh","-c","until nc -vz ca-apphub-config-server-service 8888;do sleep 5; done"],"image":"busybox","imagePullPolicy":"Always","name":"init-config","resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"},{"command":["sh","-c","until nc -vz ca-apphub-discovery-server 8761;do sleep 5; done"],"image":"busybox","imagePullPolicy":"Always","name":"init-discovery","resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"},{"command":["sh","-c","until nc -vz ca-apphub-cache-adapter-service  8080;do sleep 5; done"],"image":"busybox","imagePullPolicy":"Always","name":"init-cache","resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"nodeSelector":{"node-role.kubernetes.io/worker":"true"},"restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30,"tolerations":[{"key":"com.docker.ucp.manager","operator":"Exists"}],"volumes":[{"hostPath":{"path":"/usr/share/zoneinfo/Europe/Rome","type":""},"name":"timezone"}]}}},"status":{"conditions":[{"lastTransitionTime":"2020-08-06T15:22:31Z","lastUpdateTime":"2020-08-06T15:22:31Z","message":"Deployment does not have minimum availability.","reason":"MinimumReplicasUnavailable","status":"False","type":"Available"},{"lastTransitionTime":"2020-08-06T15:32:31Z","lastUpdateTime":"2020-08-06T15:32:31Z","message":"ReplicaSet \"admin-server-58c6f9d755\" has timed out progressing.","reason":"ProgressDeadlineExceeded","status":"False","type":"Progressing"}],"observedGeneration":1,"replicas":1,"unavailableReplicas":1,"updatedReplicas":1}}
+  creationTimestamp: "2020-08-06T15:22:29Z"
+  generation: 13
+  labels:
+    app: admin-server
+  name: admin-server
+  namespace: app-hub
+  resourceVersion: "70461549"
+  selfLink: /apis/extensions/v1beta1/namespaces/app-hub/deployments/admin-server
+  uid: a4306fa3-d7f8-11ea-aade-0242ac110009
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 0
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: admin-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2020-09-30T18:16:54+02:00"
+      creationTimestamp: null
+      labels:
+        app: admin-server
+    spec:
+      containers:
+      - env:
+        - name: TZ
+          value: Europe/Rome
+        image: multichannel-dtr-kb1.gribankprd.dmz/hn/credit-agricole-app-hub-admin-server:4940
+        imagePullPolicy: IfNotPresent
+        name: admin-server
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2Gi
+          requests:
+            cpu: 250m
+            memory: 1Gi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: acr-auth-sp
+      - name: dtr
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - until nc -vz ca-apphub-config-server-service 8888;do sleep 5; done
+        image: busybox
+        imagePullPolicy: Always
+        name: init-config
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      - command:
+        - sh
+        - -c
+        - until nc -vz ca-apphub-discovery-server 8761;do sleep 5; done
+        image: busybox
+        imagePullPolicy: Always
+        name: init-discovery
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      - command:
+        - sh
+        - -c
+        - until nc -vz ca-apphub-cache-adapter-service  8080;do sleep 5; done
+        image: busybox
+        imagePullPolicy: Always
+        name: init-cache
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      nodeSelector:
+        node-role.kubernetes.io/worker: "true"
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - key: com.docker.ucp.manager
+        operator: Exists
+      volumes:
+      - hostPath:
+          path: /usr/share/zoneinfo/Europe/Rome
+          type: ""
+        name: timezone
+status:
+  conditions:
+  - lastTransitionTime: "2020-08-27T07:37:41Z"
+    lastUpdateTime: "2020-08-27T07:37:41Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2020-08-27T07:37:42Z"
+    lastUpdateTime: "2020-09-30T16:18:48Z"
+    message: ReplicaSet "admin-server-7cdfcf758f" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 13

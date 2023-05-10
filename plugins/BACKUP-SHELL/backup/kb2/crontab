@@ -1,0 +1,4 @@
+
+0 7 * * Sun	/FS_K8S_Backup/backup/backup_swarm.sh > /FS_K8S_Backup/backup_swarm.log 2>&1
+0 8 * * Sun	/FS_K8S_Backup/backup/backup_UCP.sh > /FS_K8S_Backup/backup_UCP.log 2>&1
+0 13 * * *	/FS_K8S_Backup/backup/wrap.sh > /FS_K8S_Backup/backup_conf.log 2>&1
