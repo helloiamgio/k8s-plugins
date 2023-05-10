@@ -1,0 +1,32 @@
+CPU Requests
+--------------
+kubectl get po --all-namespaces \
+ -o=jsonpath="{range .items[*]}{.metadata.namespace}:{.metadata.name}{'\n'}{range .spec.containers[*]}  {.name}:{.resources.requests.cpu}{'\n'}{end}{'\n'}{end}"
+
+CPU Limits
+-----------
+kubectl get po --all-namespaces \
+ -o=jsonpath="{range .items[*]}{.metadata.namespace}:{.metadata.name}{'\n'}{range .spec.containers[*]}  {.name}:{.resources.limits.cpu}{'\n'}{end}{'\n'}{end}"
+ 
+ 
+kubectl get pods -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.containers[].resources.requests.cpu}{"\n"}{end}' 
+kubectl get pods -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.containers[].resources.limits.cpu}{"\n"}{end}'
+
+kubectl get pods -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.containers[].resources.requests.memory}{"\n"}{end}'
+kubectl get pods -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.containers[].resources.limits.memory}{"\n"}{end}'
+
+kubectl get pods <podname> -o=jsonpath='{range .spec.containers[*]}{"Container Name: "}{.name}{"\n"}{"Requests:"}{.resources.requests}{"\n"}{"Limits:"}{.resources.limits}{"\n"}{end}'
+
+
+if [ $# != 1 ]
+then
+	echo "Inserire NAMESPACE" && exit 1
+fi	
+NAMESPACE=$1
+for i in $(k get po -n $NAMESPACE -o name)
+do
+	kubectl get $i -o=jsonpath='{range .spec.containers[*]}{"Container Name: "}{.name}{"\n"}{"Requests:"}{.resources.requests}{"\n"}{"Limits:"}{.resources.limits}{"\n"}{end}' -n $NAMESPACE
+	printf "\n"
+done	
+
+
